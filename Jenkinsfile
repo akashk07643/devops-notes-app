@@ -16,7 +16,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                dir('notes-app') {
+                    sh 'docker build -t $IMAGE_NAME .'
+                }
             }
         }
 
@@ -43,7 +45,7 @@ pipeline {
 
     post {
         success {
-            echo 'React Notes App Deployed Successfully 🚀'
+            echo 'Deployment Successful 🚀'
         }
 
         failure {
