@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Akash@2004
+      MYSQL_DATABASE: NotesDB
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/models/db.sql:/docker-entrypoint-initdb.d/db.sql
+    networks:
+      - notes-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: notes-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - JWT_SECRET=supersecretkeyformynotesapp12345!
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=Akash@2004
+      - DB_DATABASE=NotesDB
+      - DB_PORT=3306
+    depends_on:
+      - db
+    networks:
+      - notes-network
+
+  frontend:
+    build:
+      context: ./notes-app
+      dockerfile: Dockerfile
+    container_name: notes-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - notes-network
+
+volumes:
+  mysql_data:
+
+networks:
+  notes-network:
+    driver: bridge
