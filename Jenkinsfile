@@ -13,6 +13,7 @@ pipeline {
                 echo 'Deploying Notes App Services (Frontend, Backend, MySQL) using Docker Compose...'
                 // Spin down old services (if any) and rebuild images to apply code changes
                 sh 'docker compose down || true'
+                echo 'old Docker stopped and again new docker build started'
                 sh 'docker compose up --build -d'
             }
         }
