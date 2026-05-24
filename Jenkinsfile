@@ -2,30 +2,33 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout Code') {
+
+        stage('Get Code') {
             steps {
+                echo 'Getting code from GitHub...'
                 checkout scm
             }
         }
 
-        stage('Build and Deploy Full-Stack Services') {
+        stage('Run App') {
             steps {
-                echo 'Deploying Notes App Services (Frontend, Backend, MySQL) using Docker Compose...'
-                // Spin down old services (if any) and rebuild images to apply code changes
+                echo 'Stopping old app...'
                 sh 'docker compose down || true'
-                echo 'old Docker stopped and again new docker build started'
+
+                echo 'Starting new app...'
                 sh 'docker compose up --build -d'
             }
         }
     }
 
     post {
+
         success {
-            echo 'Deployment Successful 🚀'
+            echo 'App is running successfully 🚀'
         }
 
         failure {
-            echo 'Deployment Failed ❌'
+            echo 'Something went wrong ❌'
         }
     }
 }
