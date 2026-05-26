@@ -10,7 +10,7 @@ function LandingPage() {
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-5 border-b border-gray-800">
         <h1 className="text-3xl font-bold text-blue-500 cursor-pointer" onClick={() => navigate("/")}>
-          NotesApp
+          MYNotesApp
         </h1>
 
         {token ? (
